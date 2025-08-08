@@ -190,9 +190,7 @@ const PendingWithdrawals = () => {
         UserId: withdrawal.userId || "N/A",
         UserName: withdrawal.userName || "N/A",
         Network: withdrawal.token || "N/A",
-        Initiated: withdrawal.createdAt
-          ? new Date(withdrawal.createdAt).toLocaleString()
-          : "N/A",
+        Initiated: withdrawal.createdAt|| "N/A",
         Amount: withdrawal.amount || 0,
         Charge: withdrawal.charge || 0,
         USDT_Amount: withdrawal.usdt_Amount || 0,

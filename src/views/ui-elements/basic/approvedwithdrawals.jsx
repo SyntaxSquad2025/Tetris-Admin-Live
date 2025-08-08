@@ -166,12 +166,8 @@ const ApprovedWithdrawals = () => {
           Token_Amount: withdrawal.token_Amount || 0,
           Fee_Tokens: withdrawal.fee_Tokens || 0,
           Token: withdrawal.token || 0,
-          "Created At": withdrawal.createdAt
-            ? new Date(withdrawal.createdAt).toLocaleString()
-            : "N/A",
-          "Updated At": withdrawal.updatedAt
-            ? new Date(withdrawal.updatedAt).toLocaleString()
-            : "N/A",
+          "Created At": withdrawal.createdAt || "N/A",
+          "Updated At": withdrawal.updatedAt || "N/A",
           Status: withdrawal.status || "N/A",
         }))
       );
@@ -488,8 +484,7 @@ const handleSubmit = async (event) => {
                 </CAlert>
               )}
 {/* 
-              {error &&
-               (
+              {error && (
                 <CAlert
                   style={{
                     background: `${darkTheme.danger}20`,
@@ -504,8 +499,7 @@ const handleSubmit = async (event) => {
                   <i className="fas fa-exclamation-triangle me-2" />
                   {error}
                 </CAlert>
-              )
-              } */}
+              )} */}
 
               {/* Wallet connect + Approve button */}
               <div className="d-flex justify-content-end align-items-center mb-3">

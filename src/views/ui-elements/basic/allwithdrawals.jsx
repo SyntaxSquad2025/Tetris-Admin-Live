@@ -150,8 +150,8 @@ const AllWithdrawals = () => {
         UserName: withdrawal.userName || "N/A",
         Amount: withdrawal.amount || 0,
         // USDT_Amount: withdrawal.USDT_Amount || 0,
-        "Created At": withdrawal.createdAt ? new Date(withdrawal.createdAt).toLocaleString() : "N/A",
-        "Updated At": withdrawal.updatedAt ? new Date(withdrawal.updatedAt).toLocaleString() : "N/A",
+        "Created At": withdrawal.createdAt || "N/A",
+        "Updated At": withdrawal.updatedAt || "N/A",
         Status: withdrawal.status || "N/A",
       }))
 

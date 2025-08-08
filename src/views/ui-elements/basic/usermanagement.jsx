@@ -82,34 +82,47 @@ const Usermanagement = () => {
   };
 
   // Fetch users with backend pagination
-  const fetchUsers = async (page = 1, limit = usersPerPage) => {
-    try {
-      setIsLoading(true);
+const fetchUsers = async (page = 1, limit = usersPerPage, name = "") => {
+  try {
+    setIsLoading(true);
 
-      const response = await getData(
-        `${GET_ALL_USERS}?page=${page}&limit=${limit}`
-      );
-      console.log("GET_ALL_USERS Response:", response);
+    const query = new URLSearchParams({
+      page,
+      limit,
+      ...(name && { userName: name }), // add search term if exists
+    }).toString();
 
-      if (response?.users) {
-        setUsers(response.users);
-        setTotalPages(response.totalPages || 1);
-        setTotalUsers(response.count || 0);
-        setCurrentPage(response.page || 1);
-      } else {
-        setUsers([]);
-        setTotalPages(1);
-        setTotalUsers(0);
-      }
-    } catch (error) {
-      console.error("Error fetching users:", error);
+    const response = await getData(`${GET_ALL_USERS}?${query}`);
+    console.log("GET_ALL_USERS Response:", response);
+
+    if (response?.users) {
+      setUsers(response.users);
+      setTotalPages(response.totalPages || 1);
+      setTotalUsers(response.count || 0);
+      setCurrentPage(response.page || 1);
+    } else {
       setUsers([]);
       setTotalPages(1);
       setTotalUsers(0);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    setUsers([]);
+    setTotalPages(1);
+    setTotalUsers(0);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+useEffect(() => {
+  const delayDebounce = setTimeout(() => {
+    fetchUsers(1, usersPerPage, searchTerm); // Pass searchTerm to backend
+  }, 400); // 400ms debounce
+
+  return () => clearTimeout(delayDebounce);
+}, [searchTerm]);
+
 
   // Initial fetch
   useEffect(() => {
@@ -132,33 +145,31 @@ const Usermanagement = () => {
   }, [searchTerm, users]);
 
   // Filtered users based on search term (client-side filtering)
-  const filteredUsers = users.filter((user) =>
-    user.userName?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+const filteredUsers = users;
 
   // Pagination handlers
   const nextPage = () => {
-    if (currentPage < totalPages) {
-      const newPage = currentPage + 1;
-      setCurrentPage(newPage);
-      fetchUsers(newPage, usersPerPage);
-    }
-  };
+  if (currentPage < totalPages) {
+    const newPage = currentPage + 1;
+    setCurrentPage(newPage);
+    fetchUsers(newPage, usersPerPage, searchTerm);
+  }
+};
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      const newPage = currentPage - 1;
-      setCurrentPage(newPage);
-      fetchUsers(newPage, usersPerPage);
-    }
-  };
+const prevPage = () => {
+  if (currentPage > 1) {
+    const newPage = currentPage - 1;
+    setCurrentPage(newPage);
+    fetchUsers(newPage, usersPerPage, searchTerm);
+  }
+};
 
-  const goToPage = (page) => {
-    if (page >= 1 && page <= totalPages && page !== currentPage) {
-      setCurrentPage(page);
-      fetchUsers(page, usersPerPage);
-    }
-  };
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages && page !== currentPage) {
+    setCurrentPage(page);
+    fetchUsers(page, usersPerPage, searchTerm);
+  }
+};
 
   const openModal = (user) => {
     setSelectedUser(user);

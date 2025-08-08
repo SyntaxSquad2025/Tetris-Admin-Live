@@ -139,12 +139,8 @@ const TransferWithdrawals = () => {
         Fee_Tokens: withdrawal.fee_Tokens || 0,
         Token: withdrawal.token || 0,
         // Hash: withdrawal.hash || "N/A",
-        "Created At": withdrawal.createdAt
-          ? new Date(withdrawal.createdAt).toLocaleString()
-          : "N/A",
-        "Updated At": withdrawal.updatedAt
-          ? new Date(withdrawal.updatedAt).toLocaleString()
-          : "N/A",
+        "Created At": withdrawal.createdAt || "N/A",
+        "Updated At": withdrawal.updatedAt || "N/A",
         Status: withdrawal.status || "N/A",
       }));
 
